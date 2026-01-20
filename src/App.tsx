@@ -17,7 +17,7 @@ import AdminBranding from "./pages/admin/AdminBranding";
 import AdminBilling from "./pages/admin/AdminBilling";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import PublicRestaurantPage from "./pages/public/PublicRestaurantPage"; 
+import PublicRestaurantPage from "./pages/Public/PublicRestaurantPage";
 import Auth from "./pages/Auth"; // <--- 1. NEW IMPORT
 
 const queryClient = new QueryClient();
