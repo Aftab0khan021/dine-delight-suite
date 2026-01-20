@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCartStore } from '@/lib/cart-store'; // This will work now!
 import { supabase } from '@/integrations/supabase/client';
+import { Json } from '@/integrations/supabase/types';
 import {
   Dialog,
   DialogContent,
@@ -43,7 +44,7 @@ export function CheckoutModal({ open, onOpenChange, tenantId }: CheckoutModalPro
         customer_name: customerName.trim(),
         table_number: tableNumber.trim() || null,
         total_amount: getTotalAmount(),
-        items: items as any,
+        items: items as Json,
         status: 'new' as const,
       };
 

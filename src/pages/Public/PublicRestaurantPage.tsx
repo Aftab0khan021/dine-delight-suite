@@ -4,22 +4,25 @@ import { useCartStore as useCart } from "@/lib/cart-store";
 import { CheckoutModal } from "@/components/CheckoutModal"; // Ensure you copied this component!
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ShoppingCart, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Tables } from "@/integrations/supabase/types";
+
+type Tenant = Tables<"tenants">;
+type MenuItem = Tables<"menu_items">;
 
 interface PublicRestaurantPageProps {
   subdomain: string;
 }
 
 export default function PublicRestaurantPage({ subdomain }: PublicRestaurantPageProps) {
-  const [tenant, setTenant] = useState<any>(null);
-  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [tenant, setTenant] = useState<Tenant | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
   
-  const { addItem, items, total } = useCart();
+  const { addItem, items, getTotalAmount } = useCart();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,7 +37,12 @@ export default function PublicRestaurantPage({ subdomain }: PublicRestaurantPage
           .single();
 
         if (tenantError || !tenantData) {
-          console.error("Restaurant not found");
+          console.error("Restaurant not found", tenantError);
+          toast({
+            variant: "destructive",
+            title: "Restaurant not found",
+            description: `The restaurant "${subdomain}" could not be found.`,
+          });
           setLoading(false);
           return;
         }
@@ -51,13 +59,18 @@ export default function PublicRestaurantPage({ subdomain }: PublicRestaurantPage
         setMenuItems(menuData || []);
       } catch (error) {
         console.error("Error loading page:", error);
+        toast({
+          variant: "destructive",
+          title: "Error loading menu",
+          description: "Failed to load restaurant menu. Please try again later.",
+        });
       } finally {
         setLoading(false);
       }
     }
 
     if (subdomain) loadRestaurant();
-  }, [subdomain]);
+  }, [subdomain, toast]);
 
   if (loading) {
     return (
@@ -124,7 +137,12 @@ export default function PublicRestaurantPage({ subdomain }: PublicRestaurantPage
                 <Button 
                   className="w-full" 
                   onClick={() => {
-                    addItem({ ...item, quantity: 1 });
+                    addItem({ 
+                      id: item.id, 
+                      name: item.name, 
+                      price: item.price, 
+                      image_url: item.image_url || undefined 
+                    });
                     toast({ title: "Added to cart", description: `${item.name} added.` });
                   }}
                 >
@@ -140,15 +158,15 @@ export default function PublicRestaurantPage({ subdomain }: PublicRestaurantPage
       {items.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg md:hidden">
           <Button className="w-full size-lg text-lg" onClick={() => setIsCartOpen(true)}>
-            View Order (${total.toFixed(2)})
+            View Order (${getTotalAmount().toFixed(2)})
           </Button>
         </div>
       )}
 
       {/* --- CHECKOUT MODAL --- */}
       <CheckoutModal 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
+        open={isCartOpen} 
+        onOpenChange={setIsCartOpen} 
         tenantId={tenant.id}
       />
     </div>
