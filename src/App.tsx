@@ -18,7 +18,7 @@ import AdminBilling from "./pages/admin/AdminBilling";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PublicRestaurantPage from "./pages/public/PublicRestaurantPage"; 
-import Auth from "./pages/Auth"; // <--- ADDED IMPORT
+import Auth from "./pages/Auth"; // <--- 1. NEW IMPORT
 
 const queryClient = new QueryClient();
 
@@ -52,7 +52,7 @@ const RequireAuth = () => {
 
   if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
   
-  // FIX: Redirect to /auth instead of / to prevent loop
+  // 2. FIX: Redirect to /auth instead of / to prevent loop
   if (!session) return <Navigate to="/auth" replace />; 
 
   return <Outlet />;
@@ -83,7 +83,7 @@ const App = () => {
               /* SCENARIO 2: MAIN APP VIEW */
               <>
                 <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} /> {/* <--- ADDED ROUTE */}
+                <Route path="/auth" element={<Auth />} /> {/* <--- 3. ADDED ROUTE */}
                 
                 {/* Protected Admin Routes */}
                 <Route element={<RequireAuth />}>

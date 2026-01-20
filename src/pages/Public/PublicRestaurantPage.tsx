@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useCart } from "@/lib/cart-store";
+import { useCartStore as useCart } from "@/lib/cart-store";
 import CheckoutModal from "@/components/CheckoutModal"; // Ensure you copied this component!
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
