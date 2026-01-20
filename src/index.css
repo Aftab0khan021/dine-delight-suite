@@ -8,51 +8,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Warm-neutral hospitality palette (HSL only) */
+    --background: 36 33% 98%;
+    --foreground: 215 28% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 36 33% 99%;
+    --card-foreground: 215 28% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 36 33% 99%;
+    --popover-foreground: 215 28% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Deep olive as the main accent (confident but calm) */
+    --primary: 154 35% 18%;
+    --primary-foreground: 36 33% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Stone surfaces */
+    --secondary: 32 20% 93%;
+    --secondary-foreground: 215 28% 12%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 32 18% 94%;
+    --muted-foreground: 215 12% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 32 22% 90%;
+    --accent-foreground: 215 28% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 52%;
+    --destructive-foreground: 36 33% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 14% 88%;
+    --input: 30 14% 88%;
+    --ring: 154 35% 18%;
 
-    --radius: 0.5rem;
+    --radius: 0.8rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Sidebar */
+    --sidebar-background: 36 33% 99%;
+    --sidebar-foreground: 215 18% 18%;
+    --sidebar-primary: 154 35% 18%;
+    --sidebar-primary-foreground: 36 33% 98%;
+    --sidebar-accent: 32 18% 94%;
+    --sidebar-accent-foreground: 215 28% 12%;
+    --sidebar-border: 30 14% 88%;
+    --sidebar-ring: 154 35% 18%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Extra tokens */
+    --shadow-elevated: 0 18px 50px -22px hsl(var(--foreground) / 0.25);
+    --shadow-soft: 0 10px 30px -18px hsl(var(--foreground) / 0.18);
   }
 
   .dark {
