@@ -17,29 +17,22 @@ import AdminBranding from "./pages/admin/AdminBranding";
 import AdminBilling from "./pages/admin/AdminBilling";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import PublicRestaurantPage from "./pages/public/PublicRestaurantPage"; // Import the page you just created
+import PublicRestaurantPage from "./pages/public/PublicRestaurantPage"; 
+import Auth from "./pages/Auth"; // <--- ADDED IMPORT
 
 const queryClient = new QueryClient();
 
 // --- SUBDOMAIN HELPER ---
 const getSubdomain = () => {
   const hostname = window.location.hostname;
-  // Localhost: "demo.localhost" -> ["demo", "localhost"]
-  // Production: "burger.yoursaas.com" -> ["burger", "yoursaas", "com"]
   const parts = hostname.split(".");
-  
-  // Adjust this logic based on your actual live domain depth
-  // For localhost, parts[0] is subdomain if length > 1
   if (parts.length >= 2 && parts[0] !== "www" && parts[0] !== "app") {
-    // If testing on localhost (e.g. demo.localhost), return 'demo'
-    // If on production, logic might need 'parts.length > 2' depending on domain
     return parts[0]; 
   }
   return null;
 };
 
 // --- AUTH GUARD COMPONENT ---
-// Blocks access to /app routes if not logged in
 const RequireAuth = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -58,7 +51,9 @@ const RequireAuth = () => {
   }, []);
 
   if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
-  if (!session) return <Navigate to="/" replace />; // Redirect to landing page if not logged in
+  
+  // FIX: Redirect to /auth instead of / to prevent loop
+  if (!session) return <Navigate to="/auth" replace />; 
 
   return <Outlet />;
 };
@@ -81,19 +76,14 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* ------------------------------------------------------------------
-                SCENARIO 1: PUBLIC TENANT VIEW (e.g. burger.yoursaas.com)
-                If a subdomain is detected, we HIJACK the router and only show the menu.
-               ------------------------------------------------------------------ */}
+            {/* SCENARIO 1: PUBLIC TENANT VIEW */}
             {subdomain ? (
               <Route path="*" element={<PublicRestaurantPage subdomain={subdomain} />} />
             ) : (
-              /* ------------------------------------------------------------------
-                 SCENARIO 2: MAIN APP VIEW (app.yoursaas.com or localhost:3000)
-                 Includes Landing Page and Protected Admin Dashboard.
-                 ------------------------------------------------------------------ */
+              /* SCENARIO 2: MAIN APP VIEW */
               <>
                 <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} /> {/* <--- ADDED ROUTE */}
                 
                 {/* Protected Admin Routes */}
                 <Route element={<RequireAuth />}>
